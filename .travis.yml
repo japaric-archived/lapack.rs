@@ -1,0 +1,27 @@
+language: rust
+
+env:
+  global:
+    - secure: jOzt13M5z4EfWEmYAzuF/KHyZbp5b2RrdNIEZI7CKL8m/u8dRyZ8TX5MGLDWTBrXSNVvBbo+0ZhT2LpQvzPnj6dElLAdAvaG/4ugxGzBChopNkZwWlYZDdv3h403WaKEHguP02ni0yyanvqRU2Op72HR02c6zi2LA/CSAGe7kCE=
+
+before_install:
+  - sudo apt-get update
+
+install:
+  - sudo apt-get install liblapack-dev
+
+script:
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo doc --verbose
+  - ./check-line-length.sh
+
+after_success:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && bash upload-docs.sh'
+
+branches:
+  only: master
+
+notifications:
+  email:
+    on_success: never
